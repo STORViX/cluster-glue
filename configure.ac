@@ -101,11 +101,24 @@ AC_STRUCT_TIMEZONE
 dnl ===============================================
 dnl Helpers 
 dnl ===============================================
+
+## check if the compiler supports -Werror -Wunknown-warning-option
+AC_MSG_CHECKING([whether $CC supports -Wunknown-warning-option -Werror])
+BACKUP="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS -Werror -Wunknown-warning-option"
+AC_PREPROC_IFELSE([AC_LANG_PROGRAM([])],
+    [unknown_warnings_as_errors='-Wunknown-warning-option -Werror'; AC_MSG_RESULT([yes])],
+    [unknown_warnings_as_errors=''; AC_MSG_RESULT([no])])
+CPPFLAGS="$BACKUP"
+
+## helper for CC stuff
 cc_supports_flag() {
-         local CFLAGS="$@"
-         AC_MSG_CHECKING(whether $CC supports "$@")
-         AC_COMPILE_IFELSE([AC_LANG_SOURCE(int main(){return 0;})] ,[RC=0; AC_MSG_RESULT(yes)],[RC=1; AC_MSG_RESULT(no)])
-         return $RC
+    local CFLAGS="$@"
+    BACKUP="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $@ $unknown_warnings_as_errors"
+    AC_MSG_CHECKING(whether $CC supports "$@")
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE(int main(){return 0;})] ,[RC=0; AC_MSG_RESULT(yes)],[RC=1; AC_MSG_RESULT(no)])
+    return $RC
 }
 
 dnl ===============================================
@@ -1235,7 +1248,6 @@ else
 		-Wno-strict-aliasing
 		-Wpointer-arith 
 		-Wstrict-prototypes
-    		-Wunsigned-char
 		-Wwrite-strings"
 
 # Additional warnings it might be nice to enable one day
@@ -1418,4 +1430,3 @@ AC_MSG_RESULT([])
 AC_MSG_RESULT([  CFLAGS                   = ${CFLAGS}])
 AC_MSG_RESULT([  Libraries                = ${LIBS}])
 AC_MSG_RESULT([  Stack Libraries          = ${CLUSTERLIBS}])
-
