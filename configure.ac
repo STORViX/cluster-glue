@@ -1248,7 +1248,9 @@ else
 		-Wno-strict-aliasing
 		-Wpointer-arith 
 		-Wstrict-prototypes
-		-Wwrite-strings"
+		-Wwrite-strings
+		-D_POSIX_C_SOURCE=200809L
+		-D_XOPEN_SOURCE=700"
 
 # Additional warnings it might be nice to enable one day
 #		-Wshadow
