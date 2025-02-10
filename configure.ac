@@ -80,6 +80,8 @@ dnl ========================================================================
 dnl Compiler characteristics
 dnl ========================================================================
 
+enable_ansi=no
+
 AC_PROG_CC dnl Can force other with environment variable "CC".
 AM_PROG_CC_C_O
 AC_PROG_CC_STDC
@@ -1249,8 +1251,8 @@ else
 		-Wpointer-arith 
 		-Wstrict-prototypes
 		-Wwrite-strings
-		-D_POSIX_C_SOURCE=200809L
-		-D_XOPEN_SOURCE=700"
+    -Wno-error=address
+    -Wno-error=deprecated-declarations"
 
 # Additional warnings it might be nice to enable one day
 #		-Wshadow
